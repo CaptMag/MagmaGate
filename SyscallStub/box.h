@@ -77,6 +77,18 @@ typedef struct _Syscall_Info {
     PVOID SyscallInstruction;
 } SYSCALL_INFO, * PSYSCALL_INFO;
 
+void SetConfig(
+    DWORD SyscallNumber,
+    PVOID SyscallAddress
+);
+
+typedef struct _Instructions_Info {
+    DWORD SSN;
+    PVOID SyscallInstruction;
+} INSTRUCTIONS_INFO, * PINSTRUCTIONS_INFO;
+
+extern NTSTATUS SyscallInvoker();
+
 PVOID WalkPeb();
 
 BOOL GetEAT

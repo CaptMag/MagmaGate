@@ -24,6 +24,7 @@
     <ProjectGuid>{2269ca32-a1fa-48ea-8deb-38eb0d3cf162}</ProjectGuid>
     <RootNamespace>SyscallStub</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MagmaGate</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -124,14 +125,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="grabSyscall.c" />
+    <ClCompile Include="InjectionEx.c" />
+    <ClCompile Include="MagmaGate.c" />
     <ClCompile Include="Main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
+    <ClInclude Include="InjectionEx.h" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="MagmaGate.asm" />
+    <MASM Include="MagmaAsm.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
