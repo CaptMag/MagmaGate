@@ -6,9 +6,6 @@
 // https://tuttlem.github.io/2024/10/26/simple-hashing-algorithms.html
 // https://blog.sektor7.net/#!res/2021/halosgate.md
 
-#define FNV_OFFSET 2166136261u
-#define FNV_PRIME  16777619u
-
 #define DOWN 32
 #define UP -32
 
@@ -100,31 +97,22 @@ BOOL GetEAT
 
 }
 
-DWORD GetBaseHash
+DWORD sdbmrol16
 (
-	IN char* FuncName,
-	IN PVOID Ntdllbase,
-	IN PIMAGE_EXPORT_DIRECTORY pImgExport
+	IN PCHAR String
 )
 {
 
-	UINT_PTR base = (UINT_PTR)Ntdllbase;
-	UINT_PTR export = (UINT_PTR)base + pImgExport->AddressOfNames;
+	UINT hash = 0;
+	UINT StringLen = strlen(String);
 
-	UINT32 seed = (UINT32)((export >> 3) ^ (export << 13));
-
-	UINT32 hash = FNV_OFFSET;
-
-	hash ^= seed;
-	hash *= FNV_PRIME;
-
-	while (*FuncName)
+	for (UINT i = 0; i < StringLen; i++)
 	{
-		hash ^= (UINT8)*FuncName++;
-		hash *= FNV_PRIME;
+		hash = (hash << 16) | (hash >> (32 - 16)); // move left by 16
+		hash = (toupper(String[i])) + (hash << 6) + (hash << 16) - hash; // sdbm
+		hash = hash ^ i; // xor
 	}
 
-	//INFO("Function: %s | Hash: %u", FuncName, hash);
 	return hash;
 
 }
@@ -339,7 +327,7 @@ BOOL MagmaGate
 		if (FuncName[0] != 'N' || FuncName[1] != 't')
 			continue; // Skip Any Non-NTAPI Functions
 
-		if (ApiHash != GetBaseHash(FuncName, Ntdllbase, pImgDir))
+		if (ApiHash != sdbmrol16(FuncName))
 			continue;
 		WORD ord = Ordinal[i];
 		PVOID FuncAddr = (LPBYTE)Ntdllbase + Address[ord];
